@@ -1,65 +1,33 @@
 <script lang="ts">
-  import logo from './assets/svelte.png'
-  import Counter from './lib/Counter.svelte'
+  import InputText from "./lib/InputText.svelte";
+  import InputNumber from "./lib/InputNumber.svelte";
+  import { data } from "./lib/store";
+  import TextArea from "./lib/Textarea.svelte";
+
+  let selected = 0;
+
+  $: editData = $data[selected];
+
+  function selectRow(input: number) {
+    selected = input;
+  }
 </script>
 
-<main>
-  <img src={logo} alt="Svelte Logo" />
-  <h1>Hello Typescript!</h1>
-
-  <Counter />
-
-  <p>
-    Visit <a href="https://svelte.dev">svelte.dev</a> to learn how to build Svelte
-    apps.
-  </p>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme">SvelteKit</a> for
-    the officially supported framework, also powered by Vite!
-  </p>
+<main class="container mx-auto flex h-full bg-gray-50">
+  <div class=" w-1/3 bg-gray-200 p-4">
+    <ul>
+      {#each $data as row, i}
+        <li class="cursor-pointer" on:click={() => selectRow(i)}>{row.name}</li>
+      {/each}
+    </ul>
+  </div>
+  <div class="flex flex-grow flex-col gap-4 bg-gray-200 p-4">
+    <InputText value={editData.name} />
+    <InputNumber value={editData.value} />
+    <TextArea bind:value={editData.desc} />
+  </div>
 </main>
 
 <style>
-  :root {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  }
-
-  main {
-    text-align: center;
-    padding: 1em;
-    margin: 0 auto;
-  }
-
-  img {
-    height: 16rem;
-    width: 16rem;
-  }
-
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4rem;
-    font-weight: 100;
-    line-height: 1.1;
-    margin: 2rem auto;
-    max-width: 14rem;
-  }
-
-  p {
-    max-width: 14rem;
-    margin: 1rem auto;
-    line-height: 1.35;
-  }
-
-  @media (min-width: 480px) {
-    h1 {
-      max-width: none;
-    }
-
-    p {
-      max-width: none;
-    }
-  }
+  @import "./assets/style.css";
 </style>
